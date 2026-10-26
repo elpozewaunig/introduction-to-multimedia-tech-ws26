@@ -12,9 +12,12 @@ def read_image(path: str | Path) -> np.ndarray:
     TODO: open with Pillow, convert explicitly to 'RGB', create an independent
     NumPy array, and close the Pillow image (e.g. with a context manager).
     """
-    raise NotImplementedError("Implement read_image")
+    with Image.open(path).convert("RGB") as image:
+        return np.array(image)
 
 
 def write_image(image: np.ndarray, path: str | Path) -> None:
     """TODO: save the supplied uint8 RGB array as a PNG using Pillow."""
-    raise NotImplementedError("Implement write_image")
+    img = Image.fromarray(image)
+    img.save(path)
+    img.close()

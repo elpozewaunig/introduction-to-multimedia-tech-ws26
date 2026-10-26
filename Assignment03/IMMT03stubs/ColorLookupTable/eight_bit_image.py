@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 
+import numpy
 import numpy as np
 
 from image_io import read_image, write_image
@@ -20,7 +21,17 @@ def create_8bit_image(image: np.ndarray) -> np.ndarray:
     bits of B, then pack them into one byte per pixel using bit operations.
     Do not change the input RGB image.
     """
-    raise NotImplementedError("Implement create_8bit_image")
+    eight_bit_image = np.zeros(image.shape[:2], dtype=np.uint8)
+
+    for y, row in enumerate(image):
+        for x, pixel in enumerate(row):
+            r = pixel[0] & 0b11100000
+            g = (pixel[1] & 0b11100000) >> 3
+            b = (pixel[2] & 0b11000000) >> 6
+            single = r | g | b
+            eight_bit_image[y, x] = single
+
+    return eight_bit_image
 
 
 def reconstruct(data: np.ndarray) -> np.ndarray:
@@ -30,8 +41,27 @@ def reconstruct(data: np.ndarray) -> np.ndarray:
     c to c*255/3; round with floor(value + 0.5). Use wider/float arithmetic.
     Do not interpret these color codes as grayscale intensities.
     """
-    raise NotImplementedError("Implement reconstruct")
+    image = []
 
+    for y, row in enumerate(data):
+        image.append([])
+        for x, pixel in enumerate(row):
+            r = int(pixel & 0b11100000) >> 5
+            g = int(pixel & 0b00011100) >> 2
+            b = int(pixel & 0b00000011)
+
+            r = r * 255 / 7
+            g = g * 255 / 7
+            b = b * 255 / 3
+
+            r = np.uint8(r+0.5)
+            g = np.uint8(g+0.5)
+            b = np.uint8(b+0.5)
+
+            color = numpy.array([r, g, b], dtype=np.uint8)
+            image[y].append(color)
+
+    return np.array(image, dtype=np.uint8)
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
