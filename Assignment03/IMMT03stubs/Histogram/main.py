@@ -18,7 +18,9 @@ def open_image(path: str | Path) -> np.ndarray:
     independent NumPy array. The supplied PNG is stored as RGB.
     Close the Pillow image after loading, e.g. with a context manager.
     """
-    raise NotImplementedError("Implement open_image")
+    image = Image.open(path, mode="L")
+    print(image)
+    return np.array(image)
 
 
 def calc_histogram(image: np.ndarray) -> np.ndarray:
