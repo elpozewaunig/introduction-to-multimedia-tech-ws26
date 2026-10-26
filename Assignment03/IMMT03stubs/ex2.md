@@ -18,3 +18,8 @@ A: The image contrast, brightness, dynamic range, detail visibility and color ba
 * Can histogram manipulation subsequently eliminate errors made during image capture? Explain its possibilities and limitations.
 A: The answer depends on the type of error made during image capture. For instance, an overly bright image may be "fixed" by modifying the histogram, by reducing the amount of bright pixels and "moving" them to the darker side of the histogram.
 However, such errors during capture may induce loss of information which histogram manipulation can not compensate for (e.g. if the sensor reports a maximum value in brightness for large regions; no distinction can be made between such pixels in such a case).
+
+## Coding tasks
+* Look at the input image and its histogram. Draw conclusions about the gray value
+distribution and the image’s contrast.
+A: Judging from the histogram, the image appears to be fairly light and have low contrast, as the lowest value starts at ~100 and there is a significant peak at ~210.

@@ -18,9 +18,9 @@ def open_image(path: str | Path) -> np.ndarray:
     independent NumPy array. The supplied PNG is stored as RGB.
     Close the Pillow image after loading, e.g. with a context manager.
     """
-    image = Image.open(path, mode="L")
-    print(image)
-    return np.array(image)
+    with Image.open(path).convert("L") as image:
+        print(np.array(image, dtype=np.uint8))
+        return np.array(image)
 
 
 def calc_histogram(image: np.ndarray) -> np.ndarray:
@@ -28,7 +28,14 @@ def calc_histogram(image: np.ndarray) -> np.ndarray:
 
     TODO: count all pixels yourself. The sum must equal image.size.
     """
-    raise NotImplementedError("Implement calc_histogram")
+    histogram = np.zeros((256,), dtype=np.int64)
+
+    for row in image:
+        for pixel in row:
+            histogram[pixel] += 1
+
+    print(histogram)
+    return histogram
 
 
 def calc_lower_bound(hist: np.ndarray, d: float) -> int:
@@ -37,7 +44,15 @@ def calc_lower_bound(hist: np.ndarray, d: float) -> int:
     TODO: N = sum(hist); d is a fraction at each end, 0 <= d < 0.5.
     For d=0, return the smallest occupied gray value. Hist is nonempty.
     """
-    raise NotImplementedError("Implement calc_lower_bound")
+    total_pixels = np.sum(hist)
+    d_bound = total_pixels * d
+
+    pixels_encountered = 0
+    for bin_index, bin_count in enumerate(hist):
+        pixels_encountered += bin_count
+        if pixels_encountered >= d_bound:
+            return bin_index
+    return 255
 
 
 def calc_upper_bound(hist: np.ndarray, d: float) -> int:
@@ -46,7 +61,16 @@ def calc_upper_bound(hist: np.ndarray, d: float) -> int:
     TODO: use the same convention as calc_lower_bound, scanning in reverse.
     For d=0, return the largest occupied gray value.
     """
-    raise NotImplementedError("Implement calc_upper_bound")
+    total_pixels = np.sum(hist)
+    d_bound = total_pixels * d
+
+    pixels_encountered = 0
+    hist = np.flip(hist) #reverses the array
+    for bin_index, bin_count in enumerate(hist):
+        pixels_encountered += bin_count
+        if pixels_encountered >= d_bound:
+            return 255 - bin_index
+    return 0
 
 
 def stretch_histogram(image: np.ndarray, low: int, high: int) -> np.ndarray:
@@ -59,12 +83,22 @@ def stretch_histogram(image: np.ndarray, low: int, high: int) -> np.ndarray:
     if low == high:
         return image.copy()
 
-    raise NotImplementedError("Implement stretch_histogram")
+    new_image = image.copy()
+    for y, row in enumerate(image):
+        for x, pix in enumerate(row):
+            value = ((pix - low) / (high - low)) * 255
+            value = np.uint8(value + 0.5) # Round
+            value = np.clip(value, 0, 255, dtype = np.uint8) # Clip
+            new_image[y][x] = value
+
+    return new_image
 
 
 def write_image(image: np.ndarray, path: str | Path) -> None:
     """TODO: save the supplied uint8 grayscale array as a PNG using Pillow."""
-    raise NotImplementedError("Implement write_image")
+    img = Image.fromarray(image)
+    img.save(path)
+    img.close()
 
 
 def main() -> None:
