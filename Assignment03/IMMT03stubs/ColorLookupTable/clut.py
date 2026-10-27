@@ -33,9 +33,9 @@ class CLUT:
         if len(codeword) != bits or any(c not in "01" for c in codeword):
             raise ValueError(f"{channel.name} codewords must have {bits} bits")
         if not 0 <= range_start < range_end <= 256:
-            raise ValueError("Expected 0 <= start < end <= 256")
+            raise ValueError("Expected 0 <= start < end <= 256, got 0 <= " + str(range_start) + " < " + str(range_end) + " <= 256")
         if not 0 <= mapped_value <= 255:
-            raise ValueError("Mapped value must lie in 0..255")
+            raise ValueError("Mapped value must lie in 0..255, got " + str(mapped_value))
         for entry in self.entries:
             if entry.channel is channel:
                 if entry.codeword == codeword:

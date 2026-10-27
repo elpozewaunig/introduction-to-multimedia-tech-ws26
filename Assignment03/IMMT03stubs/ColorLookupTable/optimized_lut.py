@@ -18,12 +18,24 @@ def create_lookup_table(image: np.ndarray) -> CLUT:
     channel (preserve duplicates), storing them in r, g, and b below.
     Do not change the input image. The recursive calls are provided.
     """
-    r = np.empty(0, dtype=np.uint8)
-    g = np.empty(0, dtype=np.uint8)
-    b = np.empty(0, dtype=np.uint8)
+    r_samples = []
+    g_samples = []
+    b_samples = []
+
+    for y, row in enumerate(image):
+        for x, pixel in enumerate(row):
+            r_samples.append(pixel[0])
+            g_samples.append(pixel[1])
+            b_samples.append(pixel[2])
 
     # TODO: replace the empty arrays with the sorted channel samples.
-    raise NotImplementedError("Implement create_lookup_table")
+    r_samples.sort()
+    g_samples.sort()
+    b_samples.sort()
+
+    r = np.array(r_samples, dtype=np.uint8)
+    g = np.array(g_samples, dtype=np.uint8)
+    b = np.array(b_samples, dtype=np.uint8)
 
     clut = CLUT()
     create_lookup_entry(r, "", 3, clut, Channel.R)
@@ -65,10 +77,29 @@ def create_lookup_entry(values: np.ndarray, codeword: str, bits_left: int,
     if values[0] == values[-1]:
         value = int(values[0])
         clut.add_entry(codeword + "0" * bits_left, value, value + 1, value, channel)
-        return
+        return None
 
     # TODO: check bits_left, then either split and recurse or add a leaf.
-    raise NotImplementedError("Implement create_lookup_entry")
+    if bits_left == 0:
+        # add leaf
+        value = values.mean()
+        value = np.uint8(value + 0.5)
+        clut.add_entry(codeword + "0" * bits_left, values[0], int(values[-1]) + 1, value, channel)
+    else:
+        # split and recurse
+        threshold = median_threshold(values)
+
+        left = []
+        right = []
+        for value in values:
+            if value < threshold:
+                left.append(value)
+            else:
+                right.append(value)
+
+        create_lookup_entry(np.array(left), codeword + "0", bits_left - 1, clut, channel)
+        create_lookup_entry(np.array(right), codeword + "1", bits_left - 1, clut, channel)
+    return None
 
 
 def use_clut(image: np.ndarray, clut: CLUT) -> np.ndarray:
