@@ -44,7 +44,7 @@ YUV:
 
 * Research how Pillow represents an RGB pixel and how it is represented in a NumPy image array. Explain channel order, array shape, data type, and the value range per channel. Consult the Pillow and NumPy documentation.
 A: 
-Only clanker slop in this entire assignment:
+The following is the only clanker slop in this entire assignment:
 ```py
 import numpy as np
 from PIL import Image
