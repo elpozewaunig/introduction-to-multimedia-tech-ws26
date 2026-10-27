@@ -1,0 +1,1 @@
+This assignment was solved as a collaboration between Elias Pozewaunig and David Schwaiger. We strictly worked in peer programming, no part was done alone and we both claim full understanding of our results. No generative AI was used except for one singular answer in ex1 (point 4).
