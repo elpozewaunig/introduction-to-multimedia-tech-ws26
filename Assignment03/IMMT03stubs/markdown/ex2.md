@@ -13,7 +13,7 @@ In images, specifically, this means that the image can not be reconstructed from
 
 * Which image properties can be changed by histogram manipulation?
 A: The image contrast, brightness, dynamic range, detail visibility and color balance. 
-![img.png](md-images/img.png)
+![img.png](md-images/histogram.png)
 
 * Can histogram manipulation subsequently eliminate errors made during image capture? Explain its possibilities and limitations.
 A: The answer depends on the type of error made during image capture. For instance, an overly bright image may be "fixed" by modifying the histogram, by reducing the amount of bright pixels and "moving" them to the darker side of the histogram.
