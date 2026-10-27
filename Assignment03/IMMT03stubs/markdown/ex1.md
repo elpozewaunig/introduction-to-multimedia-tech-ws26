@@ -19,22 +19,27 @@ system in which each color is represented/located by a coordinate within this sp
 A: 
 
 CMY:
-  * C = 255 - R => C = 255 - 225 = 30
-  * M = 255 - G => M = 255 - 135 = 120
-  * Y = 255 - B => Y = 255 - 60 = 195
+* C = 255 - R => C = 255 - 225 = 30
+* M = 255 - G => M = 255 - 135 = 120
+* Y = 255 - B => Y = 255 - 60 = 195
 
 CMYK:
-  * K = min{30, 120, 195} = 30
-  * C = C - K = 30 - 30 = 0
-  * M = M - K = 120 - 30 = 90
-  * Y = Y - K = 195 - 30 = 165
+* K = min{30, 120, 195} = 30
+* C = C - K = 30 - 30 = 0
+* M = M - K = 120 - 30 = 90
+* Y = Y - K = 195 - 30 = 165
 
-HSV:  H = 27 , S = 73.3 , V = 88.2
-https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+HSV:
+* H = 27
+* S = 73.3
+* V = 88.2
+* https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 ![img.png](md-images/hsv-conversion.png)
 
-YUV:  Y = 0.299 *R + 0.587 *G + 0.114* B = 135,36  / U = B - Y = -75,36 / V = R - Y = -0,36
-
+YUV:
+* Y = 0.299 * R + 0.587 * G + 0.114 * B = 135,36
+* U = B - Y = -75,36 
+* V = R - Y = -0,36
 
 
 * Research how Pillow represents an RGB pixel and how it is represented in a NumPy image array. Explain channel order, array shape, data type, and the value range per channel. Consult the Pillow and NumPy documentation.
